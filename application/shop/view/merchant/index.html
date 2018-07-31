@@ -1,0 +1,134 @@
+{extend name='admin@public/content'}
+
+{block name="button"}
+
+<!--{if auth("$classuri/add")}-->
+<button data-open='{:url("$classuri/add")}' data-title="添加门店" class='layui-btn layui-btn-sm layui-btn-primary'>添加门店</button>
+<!--{/if}-->
+
+<!--{if auth("$classuri/forbid")}-->
+<button data-update data-field='status' data-value='0' data-action='{:url("$classuri/forbid")}' class='layui-btn layui-btn-sm layui-btn-primary'>批量关闭</button>
+<!--{/if}-->
+
+<!--{if auth("$classuri/resume")}-->
+<button data-update data-field='status' data-value='1' data-action='{:url("$classuri/resume")}' class='layui-btn layui-btn-sm layui-btn-primary'>批量开放</button>
+<!--{/if}-->
+
+<!--{if auth("$classuri/del")}-->
+<button data-update data-field='delete' data-action='{:url("$classuri/del")}' class='layui-btn layui-btn-sm layui-btn-primary'>批量删除</button>
+<!--{/if}-->
+
+{/block}
+
+{block name="content"}
+
+<!-- 表单搜索 开始 -->
+<form autocomplete="off" class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">门店名称</label>
+        <div class="layui-input-inline">
+            <input name="shop_title" value="{$Think.get.shop_title}" placeholder="请输入门店名称" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">商家名称</label>
+        <div class="layui-input-inline">
+            <input name="merchant_title" value="{$Think.get.merchant_title}" placeholder="请输入商家名称" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">商家手机号</label>
+        <div class="layui-input-inline">
+            <input name="merchant_phone" value="{$Think.get.merchant_phone}" placeholder="请输入商家手机号" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">添加时间</label>
+        <div class="layui-input-inline">
+            <input name="create_at" id="create_at" value="{$Think.get.create_at}" placeholder="请选择添加时间" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+    </div>
+
+</form>
+<!-- 表单搜索 结束 -->
+
+<form onsubmit="return false;" data-auto="true" method="post">
+    <!--{if empty($list)}-->
+    <p class="help-block text-center well">没 有 记 录 哦！</p>
+    <!--{else}-->
+    <input type="hidden" value="resort" name="action">
+    <table class="layui-table notevent" lay-skin="line">
+        <thead>
+        <tr>
+            <th class='list-table-check-td think-checkbox'>
+                <input data-auto-none="none" data-check-target='.list-check-box' type='checkbox'/>
+            </th>
+            <th class='list-table-sort-td'>
+                <button type="submit" class="layui-btn layui-btn-normal layui-btn-xs">排 序</button>
+            </th>
+            <th class='text-left nowrap'>门店名称</th>
+            <th class='text-left nowrap'>商家名称</th>
+            <th class='text-left nowrap'>商家手机号</th>
+            <th class="text-left">添加时间 / 状态</th>
+            <th class='text-left'></th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='list-table-check-td text-top think-checkbox'>
+                <input class="list-check-box" value='{$vo.id}' type='checkbox'>
+            </td>
+            <td class='list-table-sort-td text-top'>
+                <input name="_{$vo.id}" value="{$vo.sort}" class="list-sort-input">
+            </td>
+            <td class='text-left nowrap'>{$vo.shop_title}</td>
+            <td class='text-left nowrap'>{$vo.merchant_title}</td>
+            <td class='text-left nowrap text-top'>
+                {$vo.create_at|format_datetime|str_replace=' ','<br>',###|raw}
+                {if $vo.status eq '0'}<span class="color-red margin-left-10">已关闭</span>{elseif $vo.status eq '1'}<span class="color-green margin-left-10">开放中</span>{/if}
+            </td>
+
+            <td class='text-center nowrap text-top'>
+
+                <!--{if auth("$classuri/edit")}-->
+                <span class="text-explode">|</span>
+                <a data-open='{:url("$classuri/edit")}?id={$vo.id}'>编辑</a>
+                <!--{/if}-->
+
+                <!--{if $vo.status eq 1 and auth("$classuri/forbid")}-->
+                <span class="text-explode">|</span>
+                <a data-update="{$vo.id}" data-field='status' data-value='0' data-action='{:url("$classuri/forbid")}'>关闭</a>
+                <!--{elseif auth("$classuri/resume")}-->
+                <span class="text-explode">|</span>
+                <a data-update="{$vo.id}" data-field='status' data-value='1' data-action='{:url("$classuri/resume")}'>开放</a>
+                <!--{/if}-->
+
+                <!--{if auth("$classuri/del")}-->
+                <span class="text-explode">|</span>
+                <a data-update="{$vo.id}" data-field='delete' data-action='{:url("$classuri/del")}'>删除</a>
+                <!--{/if}-->
+
+            </td>
+        </tr>
+        {/foreach}
+        </tbody>
+    </table>
+    {if isset($page)}<p>{$page|raw}</p>{/if}
+    <!--{/if}-->
+</form>
+<script>
+    (function () {
+        window.form.render();
+        window.laydate.render({range: true, elem: '#create_at'});
+    })();
+</script>
+{/block}
