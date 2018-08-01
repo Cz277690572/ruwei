@@ -1,0 +1,150 @@
+{extend name='admin@public/content'}
+
+{block name="content"}
+<form autocomplete="off" onsubmit="return false;" action="{:request()->url()}" data-auto="true" method="post" id="LocationFrom" class='form-horizontal layui-form padding-top-20'>
+    <!--{if !empty($merchants)}-->
+    <div class="form-group">
+        <label class="col-sm-2 control-label">商户名称</label>
+        <div class='col-sm-8'>
+            <select required class="layui-select full-width" name="merchant_id">
+                <!--{foreach $merchants as $merchant}-->
+                    <!--{eq name='$merchant.id' value='$vo.merchant_id|default=0'}-->
+                        <option selected="selected" value="{$merchant.id}">{$merchant.merchant_title}</option>
+                    <!--{else}-->
+                        <option value="{$merchant.id}">{$merchant.merchant_title}</option>
+                    <!--{/eq}-->
+                <!--{/foreach}-->
+            </select>
+        </div>
+    </div>
+    <!--{/if}-->
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">门店名称</label>
+        <div class='col-sm-8'>
+            <input name="title" required value="{$vo.title|default=''}" class="layui-input" title="请输入门店名称" placeholder="请输入门店名称">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">门店联系人名称</label>
+        <div class='col-sm-8'>
+            <input name="contact_name" required value="{$vo.contact_name|default=''}" class="layui-input" title="请输入门店联系人名称" placeholder="请输入门店联系人名称">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">门店联系人手机号</label>
+        <div class='col-sm-8'>
+            <input name="contact_phone" required pattern="^1\d{10}$" value="{$vo.contact_phone|default=''}" class="layui-input" title="请输入门店联系人手机号" placeholder="请输入门店联系人手机号">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label label-required">门店省市区</label>
+        <div class="col-sm-2">
+            <select name="province" class="layui-select block full-width" lay-ignore></select>
+        </div>
+        <div class="col-sm-3">
+            <select name="city" class="layui-select block full-width" lay-ignore></select>
+        </div>
+        <div class="col-sm-3">
+            <select name="area" class="layui-select block full-width" lay-ignore></select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label label-required">详细地址</label>
+        <div class="col-sm-8">
+            <textarea placeholder="请输入详细地址" required title="请输入详细地址" name="address" class="layui-textarea">{$vo.address|default=""}</textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label label-required">门店图片</label>
+        <div class='col-sm-8'>
+            <table class="layui-table background-item margin-none" lay-size="sm" lay-skin="nob">
+                <thead>
+                <tr>
+                    <td>门店LOGO</td>
+                    <td>门店实景图</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="text-top" style="width:100px">
+                        <input type="hidden" name="logo" value="{$vo.logo|default=''}">
+                    </td>
+                    <td class="text-top">
+                        <input type="hidden" name="scene" value="{$vo.scene|default=''}">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label label-required">门店描述</label>
+        <div class='col-sm-8'>
+            <textarea class="layui-textarea" required name="desc" placeholder="请输入门店描述">{$vo.desc|default=''}</textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">门店图文信息</label>
+        <div class='col-sm-8'>
+            <textarea name="content">{$vo.content|default=''|htmlspecialchars_decode}</textarea>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="col-sm-7 col-sm-offset-2">
+        <div class="layui-form-item text-center">
+            {if !empty($vo.id)}<input type="hidden" name="id" value="{$vo.id}">{/if}
+            <button class="layui-btn" type="submit">保存配置</button>
+            <button class="layui-btn layui-btn-danger" type='button' onclick="window.history.back()">取消编辑</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    require(['pcasunzips'], function () {
+        new PCAS('province', 'city', 'area', '{$vo.province|default=""}', '{$vo.city|default=""}', '{$vo.area|default=""}');
+    });
+</script>
+
+<script>
+    require(['jquery', 'ckeditor', 'angular'], function () {
+        window.form.render();
+        window.createEditor('[name="content"]', {height: 500});
+        var app = angular.module("LocationFrom", []).run(callback);
+        angular.bootstrap(document.getElementById(app.name), [app.name]);
+
+        function callback() {
+
+            // 单图片上传处理
+            $('#LocationFrom [name="logo"]').uploadOneImage();
+            // 多图片上传处理
+            $('#LocationFrom [name="scene"]').uploadMultipleImage();
+
+        }
+    });
+</script>
+{/block}
+
+{block name="style"}
+<style>
+
+    .background-item {
+        padding: 15px;
+        background: #efefef;
+    }
+
+    .background-item thead tr {
+        background: #e0e0e0
+    }
+
+</style>
+{/block}

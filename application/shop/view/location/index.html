@@ -3,7 +3,7 @@
 {block name="button"}
 
 <!--{if auth("$classuri/add")}-->
-<button data-open='{:url("$classuri/add")}' data-title="添加商户" class='layui-btn layui-btn-sm layui-btn-primary'>添加商户</button>
+<button data-open='{:url("$classuri/add")}' data-title="添加门店" class='layui-btn layui-btn-sm layui-btn-primary'>添加门店</button>
 <!--{/if}-->
 
 <!--{if auth("$classuri/forbid")}-->
@@ -26,44 +26,23 @@
 <form autocomplete="off" class="layui-form layui-form-pane form-search" action="{:request()->url()}" onsubmit="return false" method="get">
 
     <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">商户名称</label>
+        <label class="layui-form-label">门店名称</label>
         <div class="layui-input-inline">
-            <input name="merchant_title" value="{$Think.get.merchant_title}" placeholder="请输入商户名称" class="layui-input">
+            <input name="title" value="{$Think.get.title}" placeholder="请输入门店名称" class="layui-input">
         </div>
     </div>
 
     <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">商户邮箱</label>
+        <label class="layui-form-label">门店联系人名称</label>
         <div class="layui-input-inline">
-            <input name="merchant_email" value="{$Think.get.merchant_email}" placeholder="请输入商家邮箱" class="layui-input">
+            <input name="contact_name" value="{$Think.get.contact_name}" placeholder="请输入门店联系人名称" class="layui-input">
         </div>
     </div>
 
     <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">开户行银行账号</label>
+        <label class="layui-form-label">门店联系人手机号</label>
         <div class="layui-input-inline">
-            <input name="bank_account" value="{$Think.get.bank_account}" placeholder="请输入开户行银行账号" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">开户行用户</label>
-        <div class="layui-input-inline">
-            <input name="bank_username" value="{$Think.get.bank_username}" placeholder="请输入开户行用户" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">法人名称</label>
-        <div class="layui-input-inline">
-            <input name="legal_name" value="{$Think.get.legal_name}" placeholder="请输入开户行银行账号" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">法人联系电话</label>
-        <div class="layui-input-inline">
-            <input name="legal_phone" value="{$Think.get.legal_phone}" placeholder="请输入法人联系电话" class="layui-input">
+            <input name="contact_phone" value="{$Think.get.contact_phone}" placeholder="请输入门店联系人手机号" class="layui-input">
         </div>
     </div>
 
@@ -95,17 +74,13 @@
             <th class='list-table-sort-td'>
                 <button type="submit" class="layui-btn layui-btn-normal layui-btn-xs">排 序</button>
             </th>
-            <th class='text-left nowrap'>商户名称</th>
-            <th class='text-left nowrap'>商户邮箱</th>
-            <th class='text-left nowrap'>商户地址</th>
+            <th class='text-left nowrap'>门店名称</th>
+            <th class='text-left nowrap'>门店联系人名称</th>
+            <th class='text-left nowrap'>门店联系人手机号</th>
 
-            <th class='text-left nowrap'>开户行银行账号</th>
-            <th class='text-left nowrap'>开户行名称</th>
-            <th class='text-left nowrap'>开户行用户</th>
-            <th class='text-left nowrap'>开户行金额</th>
+            <th class='text-left nowrap'>门店地址</th>
+            <th class='text-left nowrap'>门店描述</th>
 
-            <th class='text-left nowrap'>法人名称</th>
-            <th class='text-left nowrap'>法人联系电话</th>
             <th class="text-left">添加时间 / 状态</th>
             <th class='text-left'></th>
         </tr>
@@ -119,19 +94,14 @@
             <td class='list-table-sort-td text-top'>
                 <input name="_{$vo.id}" value="{$vo.sort}" class="list-sort-input">
             </td>
-            <td class='text-left nowrap text-top'>{$vo.merchant_title}</td>
-            <td class='text-left nowrap text-top'>{$vo.merchant_email}</td>
+            <td class='text-left nowrap text-top'>{$vo.title}</td>
+            <td class='text-left nowrap text-top'>{$vo.contact_name}</td>
+            <td class='text-left nowrap text-top'>{$vo.contact_phone}</td>
             <td class='text-left nowrap text-top'>
-                {$vo.merchant_province}/{$vo.merchant_city}/{$vo.merchant_area}<br>{$vo.merchant_address}
+                {$vo.province}/{$vo.city}/{$vo.area}<br>{$vo.address}
             </td>
-            
-            <td class='text-left nowrap text-top'>{$vo.bank_account}</td>
-            <td class='text-left nowrap text-top'>{$vo.bank_title}</td>
-            <td class='text-left nowrap text-top'>{$vo.bank_username}</td>
-            <td class='text-left nowrap text-top'>{$vo.bank_money}</td>
 
-            <td class='text-left nowrap text-top'>{$vo.legal_name}</td>
-            <td class='text-left nowrap text-top'>{$vo.legal_phone}</td>
+            <td class='text-left nowrap text-top' style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width:200px;">{$vo.desc}</td>
 
             <td class='text-left nowrap text-top'>
                 {$vo.create_at|format_datetime|str_replace=' ','<br>',###|raw}
@@ -144,6 +114,11 @@
                 <span class="text-explode">|</span>
                 <a data-open='{:url("$classuri/edit")}?id={$vo.id}'>编辑</a>
                 <!--{/if}-->
+
+                {if auth("$classuri/admin")}
+                <span class="text-explode">|</span>
+                <a data-title="添加门店管理员" data-modal='{:url("$classuri/admin")}?id={$vo.id}'>添加门店管理员</a>
+                {/if}
 
                 <!--{if $vo.status eq 1 and auth("$classuri/forbid")}-->
                 <span class="text-explode">|</span>

@@ -1,39 +1,47 @@
 /*门店账号表*/
+DROP TABLE IF EXISTS `shop_account`;
 CREATE TABLE `shop_account`(
   `id` bigint(20) unsigned NOT NULL auto_increment,
   `merchant_id` bigint(20) unsigned DEFAULT '0' COMMENT '商户ID',
   `shop_id` bigint(20) unsigned DEFAULT '0' COMMENT '门店ID',
   `username` varchar(50) NOT NULL DEFAULT '' COMMENT '登录账号',
   `password` varchar(64) NOT NULL DEFAULT '' COMMENT '登录密码',
+  `phone` varchar(16) DEFAULT '' COMMENT '账号联系人手机号',
   `nickname` varchar(20) DEFAULT '' COMMENT '昵称',
-  `remark` varchar(500) DEFAULT '' COMMENT '备注',
+  `desc` varchar(500) DEFAULT '' COMMENT '描述',
   `last_login_ip` varchar(20) NOT NULL DEFAULT '' COMMENT '最后登录ip',
   `last_login_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后登录时间',
+
+  `sort` bigint(11) unsigned DEFAULT '0' COMMENT '排序',
   `status` tinyint(1) unsigned DEFAULT '1' COMMENT '账号状态(1有效,0无效)',
   `is_deleted` tinyint(1) unsigned DEFAULT '0' COMMENT '删除状态(1删除,0未删除)',
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
 )ENGINE=innoDB DEFAULT CHARSET='utf8' COMMENT '门店账号表';
 
-/*门店商户表*/ 地址
+/*门店商户表*/
 DROP TABLE IF EXISTS `shop_merchant`;
 CREATE TABLE `shop_merchant` (
   `id` bigint(11) unsigned NOT NULL AUTO_INCREMENT,
-  `merchant_name` varchar(255) DEFAULT '' COMMENT '商户名称',
+  `merchant_title` varchar(255) DEFAULT '' COMMENT '商户名称',
   `merchant_email` varchar(50) NOT NULL DEFAULT '' COMMENT '商户邮箱',
+  `merchant_province` varchar(50) DEFAULT '' COMMENT '商户地址省份',
+  `merchant_city` varchar(50) DEFAULT '' COMMENT '商户地址城市',
+  `merchant_area` varchar(255) DEFAULT '' COMMENT '商户地址区域',
+  `merchant_address` varchar(255) DEFAULT '' COMMENT '商户详细地址',
   `merchant_logo` varchar(500) DEFAULT '' COMMENT '商户LOGO',
-  `merchant_license` varchar(1024) DEFAULT '' COMMENT '商户营业执照',
-  `merchant_desc` text COMMENT '商户描述',
+  `merchant_license` varchar(500) DEFAULT '' COMMENT '商户营业执照',
+  `merchant_desc` varchar(500) DEFAULT '' COMMENT '商户描述',
 
-  `bank_account` varchar(50) NOT NULL DEFAULT '' COMMENT '银行账号',
-  `bank_name` varchar(50) NOT NULL DEFAULT '' COMMENT '开户行名称',
-  `bank_user` varchar(50) NOT NULL DEFAULT '' COMMENT '开户行用户',
+  `bank_account` varchar(50) NOT NULL DEFAULT '' COMMENT '开户行银行账号',
+  `bank_title` varchar(255) NOT NULL DEFAULT '' COMMENT '开户行名称',
+  `bank_username` varchar(50) NOT NULL DEFAULT '' COMMENT '开户行用户',
   `bank_money` decimal(20,2) NOT NULL DEFAULT '0.00' COMMENT '开户行金额',
   
-  `faren_name` varchar(50) NOT NULL DEFAULT '' COMMENT '法人',
-  `faren_phone` varchar(50) NOT NULL DEFAULT '' COMMENT '法人联系电话',
-  `faren_posit_card` varchar(255) DEFAULT '' COMMENT '法人身份证正面图片',
-  `faren_back_idcard` varchar(255) DEFAULT '' COMMENT '法人身份证背面图片',
+  `legal_name` varchar(50) NOT NULL DEFAULT '' COMMENT '法人名称',
+  `legal_phone` varchar(50) NOT NULL DEFAULT '' COMMENT '法人联系电话',
+  `legal_posit_card` varchar(255) DEFAULT '' COMMENT '法人身份证正面图片',
+  `legal_back_card` varchar(255) DEFAULT '' COMMENT '法人身份证背面图片',
   
   `sort` bigint(11) unsigned DEFAULT '0' COMMENT '商户排序',
   `status` tinyint(1) unsigned DEFAULT '1' COMMENT '商户状态(1有效,0无效)',
@@ -42,17 +50,24 @@ CREATE TABLE `shop_merchant` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='门店商户表';
 
-/*门店表*/ 联系人，联系电话，开放时间
+/*门店表*/
 DROP TABLE IF EXISTS `shop_location`;
 CREATE TABLE `shop_location` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `merchant_id` bigint(20) unsigned DEFAULT '0' COMMENT '商户ID',
   `title` varchar(255) DEFAULT '' COMMENT '门店名称',
-  `address` varchar(255) DEFAULT '' COMMENT '门店地址',
+  `contact_name` varchar(255) DEFAULT '' COMMENT '门店联系人名称',
+  `contact_phone` varchar(16) DEFAULT '' COMMENT '门店联系人手机号',
+  `opening_at` datetime DEFAULT NULL COMMENT '开放时间',
+  `closing_at` datetime DEFAULT NULL COMMENT '关闭时间',
+  `province` varchar(50) DEFAULT NULL COMMENT '门店地址省份',
+  `city` varchar(50) DEFAULT '' COMMENT '门店地址城市',
+  `area` varchar(255) DEFAULT '' COMMENT '门店地址区域',
+  `address` varchar(255) DEFAULT '' COMMENT '门店详细地址',
   `logo` varchar(1024) DEFAULT '' COMMENT '门店logo',
   `scene` varchar(1024) DEFAULT '' COMMENT '门店实景图',
-  `desc` text COMMENT '门店描述',
-  `detail` text COMMENT '门店图文信息',
+  `desc` varchar(500) DEFAULT '' COMMENT '门店描述',
+  `content` text COMMENT '门店图文信息',
   `sort` int(11) unsigned DEFAULT '0' COMMENT '门店排序',
   `status` tinyint(1) unsigned DEFAULT '1' COMMENT '门店状态(1有效,0无效)',
   `is_deleted` tinyint(1) unsigned DEFAULT '0' COMMENT '删除状态(1删除,0未删除)',
