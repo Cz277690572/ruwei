@@ -11,7 +11,6 @@ CREATE TABLE `shop_account`(
   `desc` varchar(500) DEFAULT '' COMMENT '描述',
   `last_login_ip` varchar(20) NOT NULL DEFAULT '' COMMENT '最后登录ip',
   `last_login_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后登录时间',
-
   `sort` bigint(11) unsigned DEFAULT '0' COMMENT '排序',
   `status` tinyint(1) unsigned DEFAULT '1' COMMENT '账号状态(1有效,0无效)',
   `is_deleted` tinyint(1) unsigned DEFAULT '0' COMMENT '删除状态(1删除,0未删除)',
@@ -81,6 +80,7 @@ DROP TABLE IF EXISTS `shop_goods_cate`;
 CREATE TABLE `shop_goods_cate` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `pid` bigint(20) unsigned DEFAULT '0' COMMENT '上级分类编号',
+  `shop_id` bigint(20) DEFAULT '0' COMMENT '门店ID',
   `cate_title` varchar(255) DEFAULT '' COMMENT '商品分类名称',
   `cate_desc` text COMMENT '商品分类描述',
   `sort` bigint(20) unsigned DEFAULT '0' COMMENT '商品分类排序',
@@ -88,7 +88,7 @@ CREATE TABLE `shop_goods_cate` (
   `is_deleted` tinyint(1) unsigned DEFAULT '0' COMMENT '删除状态(1删除,0未删除)',
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='外卖商品分类表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='门店商品分类表';
 
 /*商品表*/
 DROP TABLE IF EXISTS `shop_goods`;
@@ -105,6 +105,7 @@ CREATE TABLE `shop_goods` (
   `selling_price` decimal(20,2) unsigned DEFAULT '0.00' COMMENT '商品销售价格',
 
   `package_stock` bigint(20) unsigned DEFAULT '0' COMMENT '总库存数量',
+  `package_surp` bigint(20) unsigned DEFAULT '0' COMMENT '剩余库存数量',
   `package_sale` bigint(20) unsigned DEFAULT '0' COMMENT '已销售数量',
 
   `sort` bigint(20) unsigned DEFAULT '0' COMMENT '数据排序',
@@ -113,6 +114,20 @@ CREATE TABLE `shop_goods` (
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='门店商品表';
+
+/*商品入库记录*/
+DROP TABLE IF EXISTS `shop_goods_stock`;
+CREATE TABLE `shop_goods_stock` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `goods_id` bigint(20) unsigned DEFAULT '0' COMMENT '商品ID',
+  `goods_stock` bigint(20) unsigned DEFAULT '0' COMMENT '商品库存',
+  `stock_desc` varchar(255) DEFAULT '' COMMENT '商品库存描述',
+  `sort` bigint(20) unsigned DEFAULT '0' COMMENT '数据排序',
+  `status` tinyint(1) unsigned DEFAULT '1' COMMENT '商品状态(1有效,0无效)',
+  `is_deleted` tinyint(1) unsigned DEFAULT '0' COMMENT '删除状态(1删除,0未删除)',
+  `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8 COMMENT='门店商品库存';
 
 /*门店订单主表*/
 DROP TABLE IF EXISTS `shop_order`;

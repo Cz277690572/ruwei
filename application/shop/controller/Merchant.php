@@ -11,7 +11,7 @@ use think\exception\HttpResponseException;
  * 商家商户管理
  * Class Merchant
  * @package app\shop\controller
- * @author 伟彬
+ * @author 伟彬 <277690572@qq.com>
  * @date 2018/07/31
  */
 class Merchant extends BasicAdmin
