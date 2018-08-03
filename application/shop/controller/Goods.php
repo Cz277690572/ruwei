@@ -160,8 +160,6 @@ class Goods extends BasicAdmin
         $main['goods_desc'] = $this->request->post('goods_desc', '');
         $main['selling_price'] = $this->request->post('selling_price', '0.00');
         $main['status'] = $this->request->post('status', '1');
-        $main['package_stock'] = $this->request->post('package_stock', '0');
-        $main['package_sale'] = $this->request->post('package_sale', '0');
         return ['main' => $main];
     }
 

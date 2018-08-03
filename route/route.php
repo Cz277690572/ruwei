@@ -17,6 +17,10 @@
  * @include module/init.php
  * @author Anyon<zoujingli@qq.com>
  */
+
+//use think\facade\Route;
+//Route::get('wap/:version/shop/:id','wap/:version.Location/getshop');
+
 foreach (scandir(env('app_path')) as $dir) {
     if ($dir[0] !== '.') {
         $filename = realpath(env('app_path') . "{$dir}/init.php");

@@ -165,6 +165,7 @@ CREATE TABLE `shop_order_goods` (
   `goods_logo` varchar(255) DEFAULT '' COMMENT '商品LOGO',
   `goods_image` text COMMENT '商品图片地址',
   `selling_price` decimal(20,2) unsigned DEFAULT '0.00' COMMENT '商品销售价格',
+  `price_field` varchar(20) DEFAULT 'selling_price' COMMENT '计价字段',
   `number` bigint(20) unsigned DEFAULT '0' COMMENT '订单商品数量',
   `status` bigint(1) unsigned DEFAULT '1' COMMENT '商品状态(1有效,0无效)',
   `is_deleted` bigint(1) unsigned DEFAULT '0' COMMENT '删除状态(1删除,0未删除)',
@@ -181,12 +182,12 @@ CREATE TABLE `shop_order_express` (
   `mid` bigint(20) unsigned DEFAULT '0' COMMENT '会员ID',
   `type` tinyint(1) unsigned DEFAULT '0' COMMENT '快递类型(0.订单快递,1.退货快递)',
   `order_no` char(20) DEFAULT '' COMMENT '订单编号',
-  `username` varchar(20) DEFAULT '' COMMENT '收货人姓名',
-  `phone` varchar(16) DEFAULT '' COMMENT '收货手机号',
-  `province` varchar(50) DEFAULT NULL COMMENT '收货地址省份',
-  `city` varchar(50) DEFAULT '' COMMENT '收货地址城市',
-  `area` varchar(255) DEFAULT '' COMMENT '收货地址区域',
-  `address` varchar(255) DEFAULT '' COMMENT '收货详细地址',
+  `express_username` varchar(20) DEFAULT '' COMMENT '收货人姓名',
+  `express_phone` varchar(16) DEFAULT '' COMMENT '收货手机号',
+  `express_province` varchar(50) DEFAULT NULL COMMENT '收货地址省份',
+  `express_city` varchar(50) DEFAULT '' COMMENT '收货地址城市',
+  `express_area` varchar(255) DEFAULT '' COMMENT '收货地址区域',
+  `express_address` varchar(255) DEFAULT '' COMMENT '收货详细地址',
   `send_username` varchar(255) DEFAULT '' COMMENT '寄件人名称',
   `send_phone` varchar(16) DEFAULT '' COMMENT '寄件人手机号',
   `send_province` varchar(50) DEFAULT '' COMMENT '寄件人地址省份',
@@ -251,4 +252,4 @@ CREATE TABLE `shop_member` (
   UNIQUE KEY `index_shop_member_openid` (`openid`) USING BTREE,
   UNIQUE KEY `index_shop_member_unionid` (`unionid`) USING BTREE,
   KEY `index_shop_member_phone` (`phone`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='外卖会员信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='门店会员信息';
