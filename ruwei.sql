@@ -57,6 +57,7 @@ CREATE TABLE `shop_location` (
   `title` varchar(255) DEFAULT '' COMMENT '门店名称',
   `contact_name` varchar(255) DEFAULT '' COMMENT '门店联系人名称',
   `contact_phone` varchar(16) DEFAULT '' COMMENT '门店联系人手机号',
+  `start_price` decimal(20,2) unsigned DEFAULT '0.00' COMMENT '起送价',
   `opening_at` datetime DEFAULT NULL COMMENT '开放时间',
   `closing_at` datetime DEFAULT NULL COMMENT '关闭时间',
   `province` varchar(50) DEFAULT NULL COMMENT '门店地址省份',
@@ -221,8 +222,8 @@ CREATE TABLE `shop_member_address` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='外卖会员收货地址';
 
 /*购物车*/
-DROP TABLE IF EXISTS `shop_member_cart`;
-CREATE TABLE `shop_member_cart` (
+DROP TABLE IF EXISTS `shop_cart`;
+CREATE TABLE `shop_cart` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `shop_id` bigint(20) unsigned DEFAULT '0' COMMENT '门店ID',
   `mid` bigint(20) unsigned DEFAULT '0' COMMENT '会员ID',

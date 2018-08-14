@@ -18,4 +18,9 @@ return [
     'appid'       => 'wx60a43dd8161666d4',
     'mch_id'      => '1332187001',
     'mch_key'     => 'A82DC5BD1F3359081049C568D8502BC5',
+
+    // 微信使用code换取用户openid
+    'login_url' => 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code',
+    'token_expire_in' => 7200,
+    'token_salt' => 'XIA_LANG_XIAO_YUAN',
 ];

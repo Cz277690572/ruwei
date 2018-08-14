@@ -108,3 +108,18 @@ function local_image($url)
 {
     return \service\FileService::download($url)['url'];
 }
+
+/**
+ * 获取指定长度的随机字符串
+ * @param $length
+ * @return null|string
+ */
+function getRandChar($length){
+    $str = null;
+    $strPol = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz";
+    $max = strlen($strPol) - 1;
+    for($i=0;$i<$length;$i++){
+        $str .= $strPol[rand(0, $max)];
+    }
+    return $str;
+}

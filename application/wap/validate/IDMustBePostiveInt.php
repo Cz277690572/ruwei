@@ -5,7 +5,7 @@ namespace app\wap\validate;
 use validate\BasicValidate;
 
 /**
- * 参数验证类
+ * 参数id验证类
  * Class IDMustBePostiveInt
  * @package app\wap\validate
  * @author 伟彬 <277690572@qq.com>

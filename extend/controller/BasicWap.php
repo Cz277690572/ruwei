@@ -3,6 +3,7 @@
 namespace controller;
 
 use service\ToolsService;
+use think\facade\Cache;
 
 /**
  * 手机接口基础控制器
@@ -26,8 +27,19 @@ class BasicWap
      */
     public function __construct()
     {
-        ToolsService::corsOptionsHandler();
+
         $this->request = app('request');
+        // 校验请求是否携带token令牌
+        // 校验令牌是否存在/过期
+        $token = $this->request->header('token');
+        if($token){
+            $vars = Cache::get($token);
+            if(!$vars){
+                $this->error('无效token！','',403);
+            }
+        }else{
+            $this->error('token不能为空！','',403);
+        }
     }
 
     /**

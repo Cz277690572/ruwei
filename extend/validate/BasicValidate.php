@@ -24,12 +24,20 @@ class BasicValidate extends Validate
         }
     }
 
-    protected function isPositiveInteger($value, $rule='', $date='', $field='')
+    protected function isPositiveInteger($value, $rule='', $data='', $field='')
     {
         if(is_numeric($value) && is_int($value + 0) && ($value + 0) > 0) {
             return true;
         }else{
             return false;
+        }
+    }
+
+    protected function isNotEmpty($value, $rule='', $data='', $field=''){
+        if(empty($value)){
+            return false;
+        }else{
+            return true;
         }
     }
 }

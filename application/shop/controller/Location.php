@@ -149,6 +149,7 @@ class Location extends BasicAdmin
         // 门店主数据组装
         $main['merchant_id'] = $this->request->post('merchant_id', '');
         $main['title'] = $this->request->post('title', '');
+        $main['start_price'] = $this->request->post('start_price', '0.00');
         $main['contact_name'] = $this->request->post('contact_name', '0');
         $main['contact_phone'] = $this->request->post('contact_phone', '');
         $main['province'] = $this->request->post('province', '');
