@@ -40,4 +40,19 @@ class BasicValidate extends Validate
             return true;
         }
     }
+
+    protected function isPhone($value)
+    {
+        $rule = '/^1\d{10}$/';
+        $result = preg_match($rule,$value);
+        if($result)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
 }

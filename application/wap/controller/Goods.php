@@ -35,7 +35,7 @@ class Goods extends BasicWap
         $db->where("cate_id in {$cateSql}");
 
         $goodsWhere = array('is_deleted'=>0,'status'=>1);
-        $goods = $db->where($goodsWhere)->select();
+        $goods = $db->where($goodsWhere)->where('package_surp','GT', 0)->select();
         empty($goods) && $this->error('该门店没有商品信息');
 
         $cateIds = array_column($goods,'cate_id');

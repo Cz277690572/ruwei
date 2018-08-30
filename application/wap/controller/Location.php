@@ -21,11 +21,22 @@ class Location extends BasicWap
      */
     public $table = 'ShopLocation';
 
-    public function getShop(){
+    public function getShops(){
+        $shops = Db::name($this->table)->where(['is_deleted' => '0','status'=>1])->select();
+        empty($shops) && $this->error('请求的门店不存在！');
+        foreach ($shops as $key => $val)
+        {
+            $shops[$key]['scene'] = explode('|', $val['scene']);
+        }
+        $this->success('success',$shops);
+    }
+
+    public function getShopById(){
         $get = $this->request->get();
         (new IDMustBePostiveInt())->goCheck($get);
         $shop = Db::name($this->table)->where(['id'=>$get['id'],'is_deleted' => '0','status'=>1])->find();
         empty($shop) && $this->error('请求的门店不存在！');
+        $shop['scene'] = explode('|',$shop['scene']);
         $this->success('success',$shop);
     }
 
