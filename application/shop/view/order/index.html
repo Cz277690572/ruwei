@@ -19,6 +19,20 @@
     </div>
 
     <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">门店手机</label>
+        <div class="layui-input-inline">
+            <input name="contact_phone" value="{$Think.get.contact_phone}" placeholder="请输入门店手机" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-inline">
+        <label class="layui-form-label">门店名称</label>
+        <div class="layui-input-inline">
+            <input name="title" value="{$Think.get.title}" placeholder="请输入门店名称" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-inline">
         <label class="layui-form-label">订单单号</label>
         <div class="layui-input-inline">
             <input name="order_no" value="{$Think.get.order_no}" placeholder="请输入订单单号" class="layui-input">
@@ -66,7 +80,7 @@
     <div class="layui-form-item layui-inline">
         <label class="layui-form-label">订单描述</label>
         <div class="layui-input-inline">
-            <input name="order_desc" value="{$Think.get.order_desc}" placeholder="请输入订单描述" class="layui-input">
+            <input name="desc" value="{$Think.get.desc}" placeholder="请输入订单描述" class="layui-input">
         </div>
     </div>
 
@@ -85,30 +99,9 @@
     </div>
 
     <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">收货省份</label>
+        <label class="layui-form-label">收货地址</label>
         <div class="layui-input-inline">
-            <input name="express_province" value="{$Think.get.express_province}" placeholder="请输入收货省份" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">收货城市</label>
-        <div class="layui-input-inline">
-            <input name="express_city" value="{$Think.get.express_city}" placeholder="请输入收货城市" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">收货区域</label>
-        <div class="layui-input-inline">
-            <input name="express_area" value="{$Think.get.express_area}" placeholder="请输入收货区域" class="layui-input">
-        </div>
-    </div>
-
-    <div class="layui-form-item layui-inline">
-        <label class="layui-form-label">详细地址</label>
-        <div class="layui-input-inline">
-            <input name="express_address" value="{$Think.get.express_address}" placeholder="请输入详细地址" class="layui-input">
+            <input name="express_address" value="{$Think.get.express_address}" placeholder="请输入收货地址" class="layui-input">
         </div>
     </div>
 
@@ -137,6 +130,7 @@
                 <input data-auto-none="none" data-check-target='.list-check-box' type='checkbox'/>
             </th>
             <th class="text-left">会员信息</th>
+            <th class="text-left">门店信息</th>
             <th class="text-left">订单信息</th>
             <th class="text-left nowrap padding-none">
                 <table class="layui-table think-inner-table">
@@ -152,6 +146,7 @@
                 </table>
             </th>
             <th class="text-left">发货信息</th>
+            <th class='text-left'></th>
         </tr>
         </thead>
         <tbody>
@@ -165,7 +160,12 @@
                 会员手机：{$vo.member.phone|default='<span class="color-desc">未设置会员手机</span>'|raw}
             </td>
             <td class="text-left text-top nowrap">
-                订单单号：<b>{$vo.order_no}</b> {if $vo.type eq 3}<span class="layui-badge-rim">套餐</span> {/if}
+                门店名称：{$vo.location.title|default='<span class="color-desc">未设置门店名称</span>'|raw}<br>
+                门店手机：{$vo.location.contact_phone|default='<span class="color-desc">未设置门店手机</span>'|raw}<br>
+                门店地址：{$vo.location.area|default='<span class="color-desc">未设置门店地址</span>'|raw}{$vo.location.address|default=''|raw}
+            </td>
+            <td class="text-left text-top nowrap">
+                订单单号：<b>{$vo.order_no}</b>
                 {switch name='vo.status'}
                 {case value='0'}<span class="layui-badge layui-bg-gray">已取消</span>{/case}
                 {case value='1'}<span class="layui-badge layui-bg-black">待付款</span>{/case}
@@ -180,6 +180,7 @@
                 {case value='7'}<span class="layui-badge layui-bg-rown">退款处理中</span>{/case}
                 {/switch}
                 <br>
+                备注：<b>{$vo.desc}</b>
             </td>
             <td class="text-left text-top nowrap padding-none">
                 <table class="layui-table think-inner-table">
@@ -191,7 +192,7 @@
                         <td>[{$goods.goods_id}] {$goods.goods_title}</td>
                         <td class="text-right">
                             <b>
-                                ￥ {$goods['price_field']}
+                                ￥ {$goods[$goods['price_field']]}
                                 <span class="layui-icon font-s12">&#x1006;</span>
                                 {$goods.number}
                             </b>
@@ -214,10 +215,20 @@
                     <!--{/if}-->
                     <br>
                     收货信息：{$vo.express.express_username} {$vo.express.express_phone}<br>
-                    收货地址：{$vo.express.express_province}{$vo.express.express_city}{$vo.express.express_area}{$vo.express.express_address}
+                    收货地址：{$vo.express.express_area}{$vo.express.express_address}
                     {if auth('shop/order/address')}<a data-title="修改收货人信息" data-modal="{:url('order/address')}?order_no={$vo.order_no}">修改</a>{/if}
                 {/if}
                 {if !empty($vo.express.real_express_at)}<br>发货时间：{$vo.express.real_express_at|format_datetime}{/if}
+            </td>
+            <td class='text-center nowrap text-top'>
+
+                <!--{if $vo.status eq 2 and auth("$classuri/send")}-->
+                <span class="text-explode">|</span>
+                <a data-update="{$vo.id}" data-field='status' data-value='3' data-action='{:url("$classuri/send")}'>发货</a>
+                <!--{else}-->
+                    暂无操作
+                <!--{/if}-->
+
             </td>
         </tr>
         {/foreach}

@@ -19,13 +19,13 @@
         <label class="layui-form-label label-required">收货省市区</label>
         <div class="layui-input-block">
             <div class="layui-col-xs4 padding-right-5">
-                <select name="express_province" class="layui-select block full-width" lay-ignore></select>
+                <select name="province" class="layui-select block full-width" lay-ignore></select>
             </div>
             <div class="layui-col-xs4 padding-right-5">
-                <select name="express_city" class="layui-select block full-width" lay-ignore></select>
+                <select name="city" class="layui-select block full-width" lay-ignore></select>
             </div>
             <div class="layui-col-xs4">
-                <select name="express_area" class="layui-select block full-width" lay-ignore></select>
+                <select name="area" class="layui-select block full-width" lay-ignore></select>
             </div>
         </div>
     </div>
@@ -53,8 +53,11 @@
     </div>
 
     <script>
+        // require(['pcasunzips'], function () {
+        //     new PCAS('express_province', 'express_city', 'express_area', '{$express_province|default=""}', '{$express_city|default=""}', '{$express_area|default=""}');
+        // });
         require(['pcasunzips'], function () {
-            new PCAS('express_province', 'express_city', 'express_area', '{$express_province}', '{$express_city}', '{$express_area}');
+            new PCAS('province', 'city', 'area', '{$express_province|default=""}', '{$express_city|default=""}', '{$express_area|default=""}');
         });
     </script>
 </form>

@@ -24,7 +24,6 @@ class Order extends BasicWap
 
         // 接受订单数据
         $params = app('request')->post();
-//        $this->success('',$perams);
 
         // 数据校验
         (new OrderPlace())->goCheck($params);
@@ -34,11 +33,11 @@ class Order extends BasicWap
 
         if($result['code'])
         {
-            $this->success($result['msg'],$result['data']);
+            $this->success($result['msg'], $result['data']);
         }
         else
         {
-            $this->error($result['msg'],$result['data']);
+            $this->error($result['msg']);
         }
     }
 

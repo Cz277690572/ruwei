@@ -150,13 +150,19 @@ class OrderService
      */
     public static function buildOrderList(&$list)
     {
+        $locationIds = array_unique(array_column($list, 'shop_id'));
         $mids = array_unique(array_column($list, 'mid'));
         $orderNos = array_unique(array_column($list, 'order_no'));
+        $locationList = Db::name("ShopLocation")->whereIn('id', $locationIds)->select();
         $memberList = Db::name("ShopMember")->whereIn('id', $mids)->select();
         $goodsList = Db::name('ShopOrderGoods')->whereIn('order_no', $orderNos)->select();
         $expressList = Db::name('ShopOrderExpress')->whereIn('order_no', $orderNos)->select();
         foreach ($list as $key => $vo) {
-            list($list[$key]['member'], $list[$key]['goods'], $list[$key]['express']) = [[], [], []];
+            list($list[$key]['location'], $list[$key]['member'], $list[$key]['goods'], $list[$key]['express']) = [[], [], [], []];
+
+            foreach ($locationList as $location) {
+                ($vo['shop_id'] === $location['id']) && $list[$key]['location'] = $location;
+            }
             foreach ($memberList as $member) {
                 $member['nickname'] = ToolsService::emojiDecode($member['nickname']);
                 ($vo['mid'] === $member['id']) && $list[$key]['member'] = $member;

@@ -23,4 +23,7 @@ return [
     'login_url' => 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code',
     'token_expire_in' => 7200,
     'token_salt' => 'XIA_LANG_XIAO_YUAN',
+
+    // 微信支付方式
+    'pay_type' => 'wechat微信支付'
 ];

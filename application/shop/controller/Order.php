@@ -34,9 +34,23 @@ class Order extends BasicAdmin
     public function index()
     {
         $this->title = '订单管理';
-        $db = Db::name($this->table);
+        $db  = Db::name($this->table);
         $get = $this->request->get();
-        // 会员信息查询过滤
+
+        //  =============== 门店信息查询过滤 ===============
+        $locationWhere = [];
+        foreach (['contact_phone', 'title'] as $field) {
+            if (isset($get[$field]) && $get[$field] !== '') {
+                $locationWhere[] = [$field, 'like', "%{$get[$field]}%"];
+            }
+        }
+        if (!empty($locationWhere)) {
+            $locationWhere[] = ['status', '=', '1'];
+            $sql = Db::name('ShopLocation')->field('id')->where($locationWhere)->buildSql(true);
+            // SELECT `id` FROM `shop_location` WHERE  `status` = 1
+            $db->where("shop_id in {$sql}");
+        }
+        //  =============== 会员信息查询过滤 ===============
         $memberWhere = [];
         foreach (['phone', 'nickname'] as $field) {
             if (isset($get[$field]) && $get[$field] !== '') {
@@ -62,7 +76,7 @@ class Order extends BasicAdmin
         }
         // =============== 收货地址过滤 ===============
         $expressWhere = [];
-        foreach (['express_username', 'express_phone', 'express_province', 'express_city', 'express_area', 'express_address'] as $field) {
+        foreach (['express_username', 'express_phone', 'express_address'] as $field) {
             if (isset($get[$field]) && $get[$field] !== '') {
                 $expressWhere[] = [$field, 'like', "%{$get[$field]}%"];
             }
@@ -83,8 +97,10 @@ class Order extends BasicAdmin
                 $db->whereBetween($field, ["{$start} 00:00:00", "{$end} 23:59:59"]);
             }
         }
-        // echo json_encode($db->getLastSql());
+//         echo json_encode($db->getLastSql());exit();
         return parent::_list($db);
+//         $res = parent::_list($db);
+//        print_r($res);
     }
 
     /**
@@ -121,9 +137,9 @@ class Order extends BasicAdmin
             'order_no' => $order_no,
             'express_username' => $this->request->post('express_username'),
             'express_phone'    => $this->request->post('express_phone'),
-            'express_province' => $this->request->post('express_province'),
-            'express_city'     => $this->request->post('express_city'),
-            'express_area'     => $this->request->post('express_area'),
+            'express_province' => $this->request->post('province'),
+            'express_city'     => $this->request->post('city'),
+            'express_area'     => $this->request->post('area'),
             'express_address'  => $this->request->post('express_address'),
             'desc'     => $this->request->post('desc'),
         ];
@@ -133,5 +149,16 @@ class Order extends BasicAdmin
         $this->error('收货地址修改失败，请稍候再试！');
     }
 
-
+    /**
+     * 订单发货
+     * @throws \think\Exception
+     * @throws \think\exception\PDOException
+     */
+    public function send()
+    {
+        if (DataService::update($this->table)) {
+            $this->success("订单发货成功！", '');
+        }
+        $this->error("订单发货失败，请稍候再试！");
+    }
 }
