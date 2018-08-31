@@ -67,20 +67,20 @@ class OrderService
         return $order;
     }
 
-    private function createOrder($snapExpress, $snapGoodsList, $snapOrder, $order_no)
+    private function createOrder($snapExpress, $snapGoodsList, $snapOrder)
     {
+        Db::startTrans();
         try {
             // 写入订单信息
-            Db::transaction(function () use ($snapOrder, $snapGoodsList, $snapExpress) {
-                Db::name('ShopOrder')->insert($snapOrder); // 主订单信息
-                Db::name('ShopOrderGoods')->insertAll($snapGoodsList); // 订单关联的商品信息
-                Db::name('ShopOrderExpress')->insert($snapExpress); // 快递信息
-            });
-
+            $order_id = Db::name('ShopOrder')->insertGetId($snapOrder); // 主订单信息
+            Db::name('ShopOrderGoods')->insertAll($snapGoodsList); // 订单关联的商品信息
+            Db::name('ShopOrderExpress')->insert($snapExpress); // 快递信息
+            Db::commit();
         } catch (\Exception $e) {
+            Db::rollback();
             return ['code' => 0, 'msg' => '门店订单创建失败，请稍候再试！' . $e->getLine() . $e->getFile() . $e->getMessage()];
         }
-        return ['code' => 1, 'msg' => '门店订单创建成功！', 'data' => ['order_no' => $order_no]];
+        return ['code' => 1, 'msg' => '门店订单创建成功！', 'data' => ['order_id' => $order_id] ];
     }
 
     // 组合订单数据

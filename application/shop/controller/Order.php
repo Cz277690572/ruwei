@@ -99,8 +99,6 @@ class Order extends BasicAdmin
         }
 //         echo json_encode($db->getLastSql());exit();
         return parent::_list($db);
-//         $res = parent::_list($db);
-//        print_r($res);
     }
 
     /**

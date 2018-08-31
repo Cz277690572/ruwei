@@ -4,8 +4,10 @@ namespace app\wap\controller;
 
 use app\wap\service\OrderService;
 use app\wap\service\TokenService;
+use app\wap\validate\IDMustBePostiveInt;
 use app\wap\validate\OrderPlace;
 use controller\BasicWap;
+use think\Db;
 
 /**
  * 门店订单接口
@@ -16,6 +18,58 @@ use controller\BasicWap;
  */
 class Order extends BasicWap
 {
+
+    /**
+     * 默认每次最多查询的数据量
+     * @var int
+     */
+    protected $listNum = 50;
+
+    /**
+     * 通过门店id和会员id
+     * 获取会员订单数据
+     **/
+    public function getOrders()
+    {
+        $params = app('request')->get();
+        (new IDMustBePostiveInt())->goCheck($params);
+        // 会员数据获取与检验
+        $shop_id = $params['id'];
+        $mid = TokenService::getCurrentUid();
+        $orders = Db::name('ShopOrder')
+            ->where(['shop_id' => $shop_id, 'mid' => $mid, 'is_deleted' => 0])
+            ->order('id','desc')
+            ->limit(0,$this->listNum)
+            ->select();
+        empty($orders) && $this->error('没有订单数据');
+        $this->success('success', $orders);
+    }
+
+    /**
+     * 通过订单id和会员id
+     * 获取订单详情
+     */
+    public function getDetail()
+    {
+        $params = app('request')->get();
+        (new IDMustBePostiveInt())->goCheck($params);
+        $id  = $params['id'];
+        $mid = TokenService::getCurrentUid();
+        $detail = Db::name('ShopOrder')
+            ->alias('o')
+            ->join(['shop_order_express e'], 'e.order_no=o.order_no')
+            ->where(['o.id' => $id, 'o.mid' => $mid, 'o.is_deleted' => 0])
+            ->find();
+        $detail['order_no'];
+        empty($detail) && $this->error('订单信息不存在');
+        $goodsList = Db::name('ShopOrderGoods')
+            ->field('goods_title,goods_logo,selling_price,number')
+            ->where('order_no',$detail['order_no'])
+            ->select();
+        $detail['goodsList'] = $goodsList;
+        $this->success($detail);
+    }
+
     // 下订单
     public function placeOrder(){
 
@@ -41,5 +95,39 @@ class Order extends BasicWap
         }
     }
 
+    /**
+     * 通过订单id和会员Id
+     * 确认收货
+     */
+    public function receive()
+    {
+        $params = app('request')->post();
+        (new IDMustBePostiveInt())->goCheck($params);
+        $id  = $params['id'];
+        $mid = TokenService::getCurrentUid();
 
+        $order = Db::name('ShopOrder')
+            ->field('status')
+            ->where(['id' => $id, 'mid' => $mid, 'is_deleted' => 0])
+            ->find();
+
+        empty($order) && $this->error('不存在的订单');
+        if($order['status'] != config('shoporder.delivered'))
+        {
+            $this->error('还没发货呢，想干嘛？ 或者你已经更新过订单了，不要再刷了');
+        }
+
+        $status = config('shoporder.received');
+        $result = Db::name('ShopOrder')
+            ->where(['id' => $id, 'mid' => $mid])
+            ->update(['status' => $status]);
+        if($result)
+        {
+            $this->success('success');
+        }
+        else
+        {
+            $this->error('确认收货失败,请刷新重试！');
+        }
+    }
 }
