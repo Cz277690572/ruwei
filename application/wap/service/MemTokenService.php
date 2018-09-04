@@ -26,7 +26,7 @@ class MemTokenService extends TokenService
             $this->code = $code;
             $this->appId = $config['wechat_appid'];
             $this->appSecret = $config['wechat_appsecret'];
-            $this->wxLoginUrl = sprintf(config('wechat.login_url'),
+            $this->wxLoginUrl = sprintf(config('shop.login_url'),
                 $this->appId,$this->appSecret,$this->code);
         }
     }
@@ -40,16 +40,38 @@ class MemTokenService extends TokenService
             'expires_in' => 7200,
             'refresh_token' => '12_NJnkE3Qp7cUuRJE3fB8O3Vf6qpBiCuuzsX8OUWyl2euBiFHBsszeFzk_ZjVMRQWTz3K5hhF_k3G3jOSz4v6e2g',
             'openid' => 'oh-1x53M44u2IBwy0POJ9Fck-Rpc',
-            'scope' => 'snsapi_userinfo'
+            'scope' => 'snsapi_base '//'snsapi_userinfo'
         );
-        //json_decode($result,true);
+        //$wxResult = json_decode($result,true);
         if(empty($wxResult)){
             $this->error('获取openId异常，请刷新重试！');
-        }else{
+        }
+        else
+        {
             if(!empty($wxResult['errcode'])){
                 $this->error($wxResult['errmsg']);
-            }else{
-                return $this->grantToken($wxResult);
+            }
+            else
+            {
+                if($wxResult['scope'] == 'snsapi_userinfo')
+                {
+                    // 通过access_token和openid获取用户详细信息
+//                    $getUserInfoUrl = 'https://api.weixin.qq.com/sns/userinfo?access_token='.$wxResult['access_token'].'&openid='.$wxResult['openid'].'&lang=zh_CN';
+                    $getUserInfoUrl = sprintf(config('shop.get_userinfo_url'), $wxResult['access_token'], $wxResult['openid']);
+                    $uInfoJSON = HttpService::get($getUserInfoUrl);
+                    $uInfoARR  = json_decode($uInfoJSON, true);
+                    if(!empty($uInfoARR['errcode']))
+                    {
+                        $this->error('获取用户信息异常，请刷新重试！');
+                    }
+                    else{
+                        return $this->grantToken($uInfoARR);
+                    }
+                }
+                else
+                {
+                    return $this->grantToken($wxResult);
+                }
             }
         }
     }
@@ -67,7 +89,12 @@ class MemTokenService extends TokenService
         if($member){
             $uid = $member['id'];
         }else{
-            $uid = Db::name('shop_member')->insertGetId(['openid' => $openid]);
+            $data['openid'] = $openid;
+            isset($wxResult['nickname']) && $data['nickname'] = $wxResult['nickname'];
+            isset($wxResult['sex']) && $data['sex'] = $wxResult['sex'];
+            isset($wxResult['unionid']) && $data['unionid'] = $wxResult['unionid'];
+            isset($wxResult['headimgurl']) && $data['headimg'] = $wxResult['headimgurl'];
+            $uid = Db::name('shop_member')->insertGetId($data);
         }
         $cachedValue = $this->prepareCachedValue($wxResult, $uid);
         $token = $this->saveToCache($cachedValue);
@@ -78,7 +105,7 @@ class MemTokenService extends TokenService
     private function saveToCache($cachedValue){
         $key = self::generateToken();
         $value = json_encode($cachedValue);
-        $expire_in = config('wechat.token_expire_in');
+        $expire_in = config('shop.token_expire_in');
         $request = cache($key, $value, $expire_in);
         if(!$request){
             $this->error('服务器缓存异常');

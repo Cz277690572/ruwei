@@ -72,7 +72,7 @@ class GoodsService
         $stockWhere = ['status' => '1', 'is_deleted' => '0', 'goods_id' => $goods_id];
         $stockList = (array)Db::name('ShopGoodsStock')->field($stockField)->where($stockWhere)->group('goods_id')->select();
 
-        // 更新商品库存
+        // 更新商品库存 $stock['goods_stock'] 表示入库数量的总和
         foreach ($stockList as $stock) {
             $where = ['id' => $goods_id];
             $package_surp = $goods['package_surp'] + $add_stock_num; // 剩余库存

@@ -110,24 +110,17 @@ class Order extends BasicWap
             ->field('status')
             ->where(['id' => $id, 'mid' => $mid, 'is_deleted' => 0])
             ->find();
-
         empty($order) && $this->error('不存在的订单');
-        if($order['status'] != config('shoporder.delivered'))
+
+        if($order['status'] != config('shop.delivered'))
         {
             $this->error('还没发货呢，想干嘛？ 或者你已经更新过订单了，不要再刷了');
         }
-
-        $status = config('shoporder.received');
+        $status = config('shop.received');
         $result = Db::name('ShopOrder')
             ->where(['id' => $id, 'mid' => $mid])
             ->update(['status' => $status]);
-        if($result)
-        {
-            $this->success('success');
-        }
-        else
-        {
-            $this->error('确认收货失败,请刷新重试！');
-        }
+        empty($result) && $this->error('确认收货失败,请刷新重试！');
+        $this->success('success');
     }
 }

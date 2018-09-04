@@ -23,7 +23,7 @@ class TokenService
         // 用三组字符串，进行MD5加密
         $timestamp = $_SERVER['REQUEST_TIME_FLOAT'];
         // salt 盐
-        $salt = config('wechat.token_salt');
+        $salt = config('shop.token_salt');
         return md5($randChars.$timestamp.$salt);
     }
 
@@ -55,6 +55,21 @@ class TokenService
             }
         }
     }
+
+    public static function isValidOperate($checkedUid)
+    {
+        if (!$checkedUid) {
+            self::error('检查UID时必须传入一个被检查的UID', '', 0);
+        }
+        $currentOperateUid = self::getCurrentUid();
+        if ($currentOperateUid == $checkedUid)
+        {
+            return true;
+        }
+        return false;
+
+    }
+
 
     /**
      * Cors Request Header信息

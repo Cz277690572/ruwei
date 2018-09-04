@@ -57,24 +57,39 @@ class OrderService
 
         // 生成订单编码
         $order_no      = $this->makeOrderNo();
-        // 创建收货地址快照
-        $snapExpress   = $this->_snapExpress($this->express, $this->oShop, $this->mid, $order_no);
-        // 创建订单商品快照
-        $snapGoodsList = $this->_snapGoodsList($oStatus['gStatusArray'], $this->oShop, $this->mid, $order_no);
-        // 创建订单快照
         $snapOrder     = $this->_snapOrder($oStatus, $this->oShop, $this->mid, $order_no, $this->express['desc']);
-        $order         = $this->createOrder($snapExpress, $snapGoodsList, $snapOrder, $order_no);
+        $order         = $this->createOrder($oStatus, $snapOrder, $order_no);
         return $order;
     }
 
-    private function createOrder($snapExpress, $snapGoodsList, $snapOrder)
+    public function checkOrderStock($orderId)
+    {
+        $this->oGoods = Db::name('ShopOrderGoods')
+                            ->field('goods_id,number as count')
+                            ->where(['order_id' => $orderId])
+                            ->select();
+        $this->goods = $this->_getGoods($this->oGoods);
+
+        $oStatus = $this->_getOrderStatus();
+        return $oStatus;
+    }
+
+
+    private function createOrder($oStatus, $snapOrder, $order_no)
     {
         Db::startTrans();
         try {
             // 写入订单信息
             $order_id = Db::name('ShopOrder')->insertGetId($snapOrder); // 主订单信息
-            Db::name('ShopOrderGoods')->insertAll($snapGoodsList); // 订单关联的商品信息
-            Db::name('ShopOrderExpress')->insert($snapExpress); // 快递信息
+
+            // 创建订单商品快照
+            $snapGoodsList = $this->_snapGoodsList($oStatus['gStatusArray'], $this->oShop, $this->mid, $order_no, $order_id);
+            // 创建收货地址快照
+            $snapExpress   = $this->_snapExpress($this->express, $this->oShop, $this->mid, $order_no, $order_id);
+
+            Db::name('ShopOrderGoods')->insertAll($snapGoodsList);  // 订单关联的商品信息
+            Db::name('ShopOrderExpress')->insert($snapExpress);     // 快递信息
+
             Db::commit();
         } catch (\Exception $e) {
             Db::rollback();
@@ -95,7 +110,7 @@ class OrderService
             'goods_price' => $oStatus['goodsPrice'],
             'goods_count' => $oStatus['goodsCount'],
             'real_price'  => $oStatus['goodsPrice'],
-            'pay_type'    => config('wechat.pay_type'),
+            'pay_type'    => config('shop.pay_type'),
             'pay_price'   => $oStatus['goodsPrice'],
             'desc'        => $desc,
         ];
@@ -108,13 +123,14 @@ class OrderService
     }
 
     // 组合订单商品数据
-    private function _snapGoodsList($oGoods, $oShop, $mid, $order_no)
+    private function _snapGoodsList($oGoods, $oShop, $mid, $order_no, $order_id)
     {
         $snap = [];
         foreach ($oGoods as $key => $val)
         {
             $snap[$key]['shop_id']       = $oShop['id'];
             $snap[$key]['mid']           = $mid;
+            $snap[$key]['order_id']      = $order_id;
             $snap[$key]['order_no']      = $order_no;
             $snap[$key]['goods_id']      = $val['id'];
             $snap[$key]['goods_title']   = $val['name'];
@@ -126,10 +142,11 @@ class OrderService
     }
 
     // 组合订单物流数据
-    private function _snapExpress($express, $oShop, $mid, $order_no)
+    private function _snapExpress($express, $oShop, $mid, $order_no, $order_id)
     {
         $snap['shop_id']  = $oShop['id'];
         $snap['mid']      = $mid;
+        $snap['order_id'] = $order_id;
         $snap['order_no'] = $order_no;
         $snap['express_username'] = $express['username'];
         $snap['express_phone']    = $express['phone'];

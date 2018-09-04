@@ -113,6 +113,7 @@ class Goods extends BasicAdmin
             $goods_id = $this->request->post('id');
             $goods = Db::name($this->table)->where(['id' => $goods_id, 'is_deleted' => '0'])->find();
             empty($goods) && $this->error('商品编辑失败，请稍候再试！');
+            // 价格变动，未支付的订单中若含有该商品，则该订单将失效（可考虑）
             $where = ['id' => $goods_id, 'is_deleted' => '0'];
             Db::name('ShopGoods')->where($where)->update(array_merge($goods, $data['main']));
         } catch (HttpResponseException $exception) {

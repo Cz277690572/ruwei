@@ -14,6 +14,7 @@
 
 namespace WeChat\Contracts;
 
+use app\admin\controller\Index;
 use WeChat\Exceptions\InvalidArgumentException;
 use WeChat\Exceptions\InvalidResponseException;
 
@@ -161,9 +162,9 @@ class BasicPay
         $needSignType && ($params['sign_type'] = strtoupper($signType));
         $params['sign'] = $this->getPaySign($params, $signType);
         $result = Tools::xml2arr(Tools::post($url, Tools::arr2xml($params), $option));
-        if ($result['return_code'] !== 'SUCCESS') {
-            throw new InvalidResponseException($result['return_msg'], '0');
-        }
+//        if ($result['return_code'] !== 'SUCCESS') {
+//            throw new InvalidResponseException($result['return_msg'], '0');
+//        }
         return $result;
     }
 }
