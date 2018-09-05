@@ -150,6 +150,7 @@ class Location extends BasicAdmin
         $main['merchant_id'] = $this->request->post('merchant_id', '');
         $main['title'] = $this->request->post('title', '');
         $main['start_price'] = $this->request->post('start_price', '0.00');
+        $main['delivery_time'] = $this->request->post('delivery_time', '10');
         $main['contact_name'] = $this->request->post('contact_name', '0');
         $main['contact_phone'] = $this->request->post('contact_phone', '');
         $main['province'] = $this->request->post('province', '');
