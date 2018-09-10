@@ -60,13 +60,13 @@ class Order extends BasicWap
             ->join(['shop_order_express e'], 'e.order_no=o.order_no')
             ->where(['o.id' => $id, 'o.mid' => $mid, 'o.is_deleted' => 0])
             ->find();
-        $detail['order_no'];
         empty($detail) && $this->error('订单信息不存在');
         $goodsList = Db::name('ShopOrderGoods')
-            ->field('goods_title,goods_logo,selling_price,number')
+            ->field('goods_title as name, goods_logo as icon, selling_price as price, number as count')
             ->where('order_no',$detail['order_no'])
             ->select();
         $detail['goodsList'] = $goodsList;
+        $detail['status'] = config('shop.order_status')[$detail['status']];
         $this->success($detail);
     }
 
