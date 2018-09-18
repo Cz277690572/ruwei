@@ -58,6 +58,8 @@ CREATE TABLE `shop_location` (
   `contact_name` varchar(255) DEFAULT '' COMMENT '门店联系人名称',
   `contact_phone` varchar(16) DEFAULT '' COMMENT '门店联系人手机号',
   `start_price` decimal(20,2) unsigned DEFAULT '0.00' COMMENT '起送价',
+  `delivery_desc` varchar(50) DEFAULT '' COMMENT '配送描述(如:学生兼职配送)',
+  `delivery_time` int(11) unsigned DEFAULT '0' COMMENT '平均配送时间',
   `opening_at` datetime DEFAULT NULL COMMENT '开放时间',
   `closing_at` datetime DEFAULT NULL COMMENT '关闭时间',
   `province` varchar(50) DEFAULT NULL COMMENT '门店地址省份',
@@ -66,14 +68,14 @@ CREATE TABLE `shop_location` (
   `address` varchar(255) DEFAULT '' COMMENT '门店详细地址',
   `logo` varchar(1024) DEFAULT '' COMMENT '门店logo',
   `scene` varchar(1024) DEFAULT '' COMMENT '门店实景图',
-  `desc` varchar(500) DEFAULT '' COMMENT '门店描述',
-  `content` text COMMENT '门店图文信息',
+  `desc` text COMMENT '门店描述',
+  `content` text COMMENT '门店公告',
   `sort` int(11) unsigned DEFAULT '0' COMMENT '门店排序',
   `status` tinyint(1) unsigned DEFAULT '1' COMMENT '门店状态(1有效,0无效)',
   `is_deleted` tinyint(1) unsigned DEFAULT '0' COMMENT '删除状态(1删除,0未删除)',
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='门店表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='门店表';
 
 
 /*分类表*/

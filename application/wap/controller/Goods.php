@@ -35,15 +35,15 @@ class Goods extends BasicWap
         $db->where("cate_id in {$cateSql}");
 
         $goodsWhere = array('is_deleted'=>0,'status'=>1);
-        $goods = $db->where($goodsWhere)->where('package_surp','GT', 0)->select();
+        $goods = $db->field('id,cate_id,goods_title as name,selling_price as price,goods_desc as description,goods_logo as icon')->where($goodsWhere)->where('package_surp','GT', 0)->select();
         empty($goods) && $this->error('该门店没有商品信息');
 
         $cateIds = array_column($goods,'cate_id');
-        $goodsWithCates = Db::name('ShopGoodsCate')->field('id,cate_title')->where("id", "in", $cateIds)->select();
+        $goodsWithCates = Db::name('ShopGoodsCate')->field('id,cate_title as name')->where("id", "in", $cateIds)->select();
         foreach ($goodsWithCates as $ck => $cv){
             foreach ($goods as $gk => $gv){
                 if($gv['cate_id'] == $cv['id']){
-                    $goodsWithCates[$ck]['good'][] = $gv;
+                    $goodsWithCates[$ck]['foods'][] = $gv;
                 }
             }
         }

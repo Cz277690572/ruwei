@@ -37,11 +37,15 @@ class Order extends BasicWap
         $shop_id = $params['id'];
         $mid = TokenService::getCurrentUid();
         $orders = Db::name('ShopOrder')
+            ->field('id,order_no,order_title,order_logo,goods_count,status,real_price')
             ->where(['shop_id' => $shop_id, 'mid' => $mid, 'is_deleted' => 0])
             ->order('id','desc')
             ->limit(0,$this->listNum)
             ->select();
         empty($orders) && $this->error('没有订单数据');
+        foreach ($orders as $k => $v) {
+            $orders[$k]['status'] = config('shop.order_status')[$v['status']];
+        }
         $this->success('success', $orders);
     }
 
