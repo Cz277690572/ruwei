@@ -5,6 +5,7 @@ namespace app\wap\controller;
 use app\wap\service\MemTokenService;
 use app\wap\service\TokenService;
 use app\wap\validate\TokenGet;
+use app\wap\validate\TokenVerify;
 use service\ToolsService;
 
 /**
@@ -31,6 +32,14 @@ class Token
         $this->success('success',$data);
     }
 
+    public function verify()
+    {
+        $params = app('request')->post();
+        (new TokenVerify())->goCheck($params);
+        $res = TokenService::verifyToken($params['token']);
+        empty($res) && $this->error('无效token');
+        $this->success('有效token');
+    }
 
     /**
      * 返回成功的操作

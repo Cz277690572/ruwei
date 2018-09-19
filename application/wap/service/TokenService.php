@@ -70,6 +70,15 @@ class TokenService
 
     }
 
+    public static function verifyToken($token)
+    {
+        $vars = Cache::get($token);
+        if (!$vars) {
+            return false;
+        }else{
+            return true;
+        }
+    }
 
     /**
      * Cors Request Header信息
