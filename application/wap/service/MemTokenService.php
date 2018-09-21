@@ -32,7 +32,7 @@ class MemTokenService extends TokenService
     }
 
     public function get(){
-        var_dump($this->wxLoginUrl);
+//        var_dump($this->wxLoginUrl);
         $result = HttpService::get($this->wxLoginUrl);
         $wxResult = Array
         (
