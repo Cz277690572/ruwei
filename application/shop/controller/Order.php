@@ -154,9 +154,21 @@ class Order extends BasicAdmin
      */
     public function send()
     {
-        if (DataService::update($this->table)) {
-            $this->success("订单发货成功！", '');
+        $request = app('request');
+        $status  = $request->post('value', '');
+        $orderId = $request->post('id', '');
+        empty($orderId) && $this->error("订单发货失败，请稍候再试！");
+        Db::startTrans();
+        try {
+            Db::name('ShopOrder')->where('id','=', $orderId)
+                ->update(array('status' => $status));
+            Db::name("ShopOrderExpress")->where(['order_id' => $orderId])
+                ->update(array('send_at' => date('Y-m-d H:i:s', time())));
+            Db::commit();
+        } catch (\Exception $e) {
+            Db::rollback();
+            $this->error("订单发货失败，请稍候再试！", '');
         }
-        $this->error("订单发货失败，请稍候再试！");
+        $this->success("订单发货成功！", '');
     }
 }

@@ -205,15 +205,10 @@
                 {if empty($vo.express)}
                 <span class="color-desc">无发货信息</span>
                 {else}
-                    {if( $vo.status eq 2 and $vo.is_pay eq 1 )}
-                        <span class="layui-badge layui-bg-blue">未发货</span>
-                    {/else}
-                        订单号：{$vo.order_no}
-                    {/if}
-                    <!--{if $vo.status eq 2 and $vo.is_pay eq 1}-->
-                    <a data-title="快速发货" data-modal="{:url('store/deliver/express')}?order_no={$vo.order_no}">快速发货</a>
+                    <!--{if $vo.status eq 3 or $vo.status eq 4 or $vo.status eq 5}-->
+                        发货时间：{$vo.express.send_at}
+                        <br>
                     <!--{/if}-->
-                    <br>
                     收货信息：{$vo.express.express_username} {$vo.express.express_phone}<br>
                     收货地址：{$vo.express.express_area}{$vo.express.express_address}
                     {if auth('shop/order/address')}<a data-title="修改收货人信息" data-modal="{:url('order/address')}?order_no={$vo.order_no}">修改</a>{/if}
@@ -222,7 +217,7 @@
             </td>
             <td class='text-center nowrap text-top'>
 
-                <!--{if $vo.status eq 2 and auth("$classuri/send")}-->
+                <!--{if $vo.status eq 2 and $vo.is_pay eq 1 and auth("$classuri/send")}-->
                 <span class="text-explode">|</span>
                 <a data-update="{$vo.id}" data-field='status' data-value='3' data-action='{:url("$classuri/send")}'>发货</a>
                 <!--{else}-->
