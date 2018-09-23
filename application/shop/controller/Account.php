@@ -75,6 +75,8 @@ class Account extends BasicAdmin
             'password' => md5($post['password']),
             'phone' => $post['phone'],
             'nickname' => $post['nickname'],
+            'location_openid' => $post['location_openid'],
+            'delivery_openid' => $post['delivery_openid'],
             'desc' => $post['desc']
         ];
 

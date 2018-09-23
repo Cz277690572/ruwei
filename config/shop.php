@@ -11,6 +11,12 @@ return [
     'express_city' => '深圳市',
     'express_area' => '南山区',
 
+    // 门店状态
+    'shop_status' => [
+        0 => '休息中',
+        1 => '营业中'
+    ],
+
     // 门店订单状态
     'order_status' => [
         0 => '订单已失效',

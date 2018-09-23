@@ -37,7 +37,7 @@ class Order extends BasicWap
         $shop_id = $params['id'];
         $mid = TokenService::getCurrentUid();
         $orders = Db::name('ShopOrder')
-            ->field('id,order_no,order_title,order_logo,goods_count,status,real_price')
+            ->field('id,order_no,order_title,order_logo,goods_count,status,pay_price')
             ->where(['shop_id' => $shop_id, 'mid' => $mid, 'is_deleted' => 0])
             ->order('id','desc')
             ->limit(0,$this->listNum)
@@ -71,7 +71,7 @@ class Order extends BasicWap
             ->select();
         $detail['goodsList'] = $goodsList;
         $detail['status'] = config('shop.order_status')[$detail['status']];
-        $this->success($detail);
+        $this->success('success', $detail);
     }
 
     // 下订单

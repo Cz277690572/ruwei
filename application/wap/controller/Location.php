@@ -27,6 +27,7 @@ class Location extends BasicWap
         foreach ($shops as $key => $val)
         {
             $shops[$key]['scene'] = explode('|', $val['scene']);
+            $shops[$key]['status'] = config('shop.shop_status')[$val['status']];
         }
         $this->success('success',$shops);
     }

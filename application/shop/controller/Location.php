@@ -150,6 +150,7 @@ class Location extends BasicAdmin
         $main['merchant_id'] = $this->request->post('merchant_id', '');
         $main['title'] = $this->request->post('title', '');
         $main['start_price'] = $this->request->post('start_price', '0.00');
+        $main['delivery_desc'] = $this->request->post('delivery_desc', '');
         $main['delivery_time'] = $this->request->post('delivery_time', '10');
         $main['contact_name'] = $this->request->post('contact_name', '0');
         $main['contact_phone'] = $this->request->post('contact_phone', '');
@@ -198,6 +199,12 @@ class Location extends BasicAdmin
      */
     public function resume()
     {
+        // 判断该门店是否有上架商品，有才能启用，没有就不能
+        $request = app('request');
+        $shopId = $request->post('id', '');
+        empty($shopId) && $this->error("刷新重试！");
+        $goods = Db::name('ShopGoods')->where(['shop_id' => $shopId, 'is_deleted' => 0, 'status' => 1])->select();
+        empty($goods) && $this->error("门店没有上架的商品不能启用");
         if (DataService::update($this->table)) {
             $this->success("门店启用成功！", '');
         }
@@ -226,6 +233,8 @@ class Location extends BasicAdmin
             'password' => md5($post['password']),
             'phone' => $post['phone'],
             'nickname' => $post['nickname'],
+            'location_openid' => $post['location_openid'],
+            'delivery_openid' => $post['delivery_openid'],
             'desc' => $post['desc']
         ];
         $result = Db::name('ShopAccount')->insert($data);
