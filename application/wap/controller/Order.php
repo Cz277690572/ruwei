@@ -60,6 +60,10 @@ class Order extends BasicWap
         $id  = $params['id'];
         $mid = TokenService::getCurrentUid();
         $detail = Db::name('ShopOrder')
+            ->field('o.*,e.express_username,e.express_phone,e.express_province,
+                e.express_city,e.express_area,e.express_address,e.send_username,
+                e.send_phone,e.send_province,e.send_city,e.send_area,
+                e.send_address,e.send_at')
             ->alias('o')
             ->join(['shop_order_express e'], 'e.order_no=o.order_no')
             ->where(['o.id' => $id, 'o.mid' => $mid, 'o.is_deleted' => 0])
