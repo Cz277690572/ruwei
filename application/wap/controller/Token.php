@@ -7,6 +7,7 @@ use app\wap\service\TokenService;
 use app\wap\validate\TokenGet;
 use app\wap\validate\TokenVerify;
 use service\ToolsService;
+use think\Controller;
 
 /**
  * 用户令牌
@@ -15,7 +16,7 @@ use service\ToolsService;
  * @author 伟彬 <277690572@qq.com>
  * @date: 2018/8/13 10:14
  */
-class Token
+class Token extends Controller
 {
 
     public function getToken(){
@@ -24,12 +25,13 @@ class Token
         $member = new MemTokenService($params['code']);
         $data['token'] = $member->get();
         $this->success('success',$data);
+//        $this->redirect('http://localhost:8080/#/shopList?token='.$data['token'].'&msg=success');
     }
 
     public function getUid(){
         $uid = TokenService::getCurrentUid();
         $data['uid'] = $uid;
-        $this->success('success',$data);
+        $this->ok('success',$data);
     }
 
     public function verify()
@@ -37,8 +39,8 @@ class Token
         $params = app('request')->post();
         (new TokenVerify())->goCheck($params);
         $res = TokenService::verifyToken($params['token']);
-        empty($res) && $this->error('无效token');
-        $this->success('有效token');
+        empty($res) && $this->no('无效token');
+        $this->ok('有效token');
     }
 
     /**
@@ -47,7 +49,7 @@ class Token
      * @param array $data 返回数据
      * @param integer $code 返回代码
      */
-    protected function success($msg, $data = [], $code = 1)
+    public function ok($msg, $data = [], $code = 1)
     {
         ToolsService::success($msg, $data, $code);
     }
@@ -58,7 +60,7 @@ class Token
      * @param array $data 返回数据
      * @param integer $code 返回代码
      */
-    protected function error($msg, $data = [], $code = 0)
+    public function no($msg, $data = [], $code = 0)
     {
         ToolsService::error($msg, $data, $code);
     }

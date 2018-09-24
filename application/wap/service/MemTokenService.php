@@ -32,17 +32,16 @@ class MemTokenService extends TokenService
     }
 
     public function get(){
-//        var_dump($this->wxLoginUrl);
         $result = HttpService::get($this->wxLoginUrl);
-        $wxResult = Array
-        (
-            'access_token' => '12_xjDp7R8BKra4EpGasgQkoLOZkHHDLJEYSlI12yhJR_NErx5WbsJOwAc4U-o6X3gmRrLlfxgTs7DGx6lkE8NYSw',
-            'expires_in' => 7200,
-            'refresh_token' => '12_NJnkE3Qp7cUuRJE3fB8O3Vf6qpBiCuuzsX8OUWyl2euBiFHBsszeFzk_ZjVMRQWTz3K5hhF_k3G3jOSz4v6e2g',
-            'openid' => 'oh-1x53M44u2IBwy0POJ9Fck-Rpc',
-            'scope' => 'snsapi_base '//'snsapi_userinfo'
-        );
-        //$wxResult = json_decode($result,true);
+//        $wxResult = Array
+//        (
+//            'access_token' => '12_xjDp7R8BKra4EpGasgQkoLOZkHHDLJEYSlI12yhJR_NErx5WbsJOwAc4U-o6X3gmRrLlfxgTs7DGx6lkE8NYSw',
+//            'expires_in' => 7200,
+//            'refresh_token' => '12_NJnkE3Qp7cUuRJE3fB8O3Vf6qpBiCuuzsX8OUWyl2euBiFHBsszeFzk_ZjVMRQWTz3K5hhF_k3G3jOSz4v6e2g',
+//            'openid' => 'oh-1x53M44u2IBwy0POJ9Fck-Rpc',
+//            'scope' => 'snsapi_base '//'snsapi_userinfo'
+//        );
+        $wxResult = json_decode($result,true);
         if(empty($wxResult)){
             $this->error('获取openId异常，请刷新重试！');
         }
