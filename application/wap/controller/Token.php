@@ -24,7 +24,7 @@ class Token extends Controller
         (new TokenGet())->goCheck($params);
         $member = new MemTokenService($params['code']);
         $data['token'] = $member->get();
-        $this->success('success',$data);
+        $this->ok('success',$data);
 //        $this->redirect('http://localhost:8080/#/shopList?token='.$data['token'].'&msg=success');
     }
 
