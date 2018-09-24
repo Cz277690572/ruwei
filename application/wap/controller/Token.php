@@ -25,7 +25,8 @@ class Token extends Controller
         $member = new MemTokenService($params['code']);
         $data['token'] = $member->get();
         $this->ok('success',$data);
-//        $this->redirect('http://localhost:8080/#/shopList?token='.$data['token'].'&msg=success');
+        //{"code":1,"msg":"success","data":{"token":"6ce28f461cf2fb3cd40daaa392aa56be"},"token":"2820282b1x2b2b211w1p"}
+        //$this->redirect('http://localhost:8080/#/shopList?token='.$data['token'].'&msg=success');
     }
 
     public function getUid(){

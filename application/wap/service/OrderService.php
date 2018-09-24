@@ -86,7 +86,28 @@ class OrderService
             $snapGoodsList = $this->_snapGoodsList($oStatus['gStatusArray'], $this->oShop, $this->mid, $order_no, $order_id);
             // 创建收货地址快照
             $snapExpress   = $this->_snapExpress($this->express, $this->oShop, $this->mid, $order_no, $order_id);
-
+            // 新增或更新用户的收货地址
+            $address = Db::name('ShopMemberAddress')->where(['mid' => $snapExpress['mid']])->find();
+            if(empty($address)){
+                Db::name('ShopMemberAddress')->insert(['mid'=>$snapExpress['mid'], 
+                    'username'=>$snapExpress['express_username'], 
+                    'phone'=>$snapExpress['express_phone'],
+                    'province'=>$snapExpress['express_province'],
+                    'city'=>$snapExpress['express_city'],
+                    'area'=>$snapExpress['express_area'],
+                    'address'=>$snapExpress['express_address'],
+                    'desc'=>$snapOrder['desc']]);
+            }else{
+                Db::name('ShopMemberAddress')->where(['mid'=>$snapExpress['mid']])->update([
+                    'username'=>$snapExpress['express_username'],
+                    'phone'=>$snapExpress['express_phone'],
+                    'province'=>$snapExpress['express_province'],
+                    'city'=>$snapExpress['express_city'],
+                    'area'=>$snapExpress['express_area'],
+                    'address'=>$snapExpress['express_address'],
+                    'desc'=>$snapOrder['desc']
+                    ]);
+            }
             Db::name('ShopOrderGoods')->insertAll($snapGoodsList);  // 订单关联的商品信息
             Db::name('ShopOrderExpress')->insert($snapExpress);     // 快递信息
 
