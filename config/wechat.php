@@ -20,7 +20,7 @@ return [
 //    'mch_key'     => 'A82DC5BD1F3359081049C568D8502BC5',
 
     // 下面参数用作微信支付
-    'appid'       => 'wx27426b7ce34961cf',
-    'mch_id'      => '1332187001',
-    'mch_key'     => 'A82DC5BD1F3359081049C568D8502BC5',
+    'appid'       => 'wx728574657c58a57e',
+    'mch_id'      => '1515228541',
+    'mch_key'     => 'h8EvS4f01LIi66LiXleeXGUkjgf8fZk5',
 ];
