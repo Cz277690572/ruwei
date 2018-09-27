@@ -133,7 +133,7 @@ class Goods extends BasicAdmin
      */
     protected function _form_assign()
     {
-        list($where, $order) = [['status' => '1', 'is_deleted' => '0'], 'sort asc,id desc'];
+        list($where, $order) = [['is_deleted' => '0'], 'sort asc,id desc'];
         $shops = (array)Db::name('ShopLocation')->where($where)->order($order)->select();
         $cates = (array)Db::name('ShopGoodsCate')->where($where)->order($order)->select();
         $this->assign([
