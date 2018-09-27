@@ -35,7 +35,7 @@ class Location extends BasicWap
     public function getShopById(){
         $get = $this->request->get();
         (new IDMustBePostiveInt())->goCheck($get);
-        $shop = Db::name($this->table)->where(['id'=>$get['id'],'is_deleted' => '0','status'=>1])->find();
+        $shop = Db::name($this->table)->where(['id'=>$get['id'],'is_deleted' => '0'])->find();
         empty($shop) && $this->error('请求的门店不存在！');
         $shop['scene'] = explode('|',$shop['scene']);
         $this->success('success',$shop);
