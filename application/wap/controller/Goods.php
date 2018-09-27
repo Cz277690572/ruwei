@@ -26,7 +26,7 @@ class Goods extends BasicWap
         (new IDMustBePostiveInt())->goCheck($get);
 
         $db = Db::name($this->table);
-        $shopWhere = array('id'=>$get['id'],'is_deleted'=>0,'status'=>1);
+        $shopWhere = array('id'=>$get['id'],'is_deleted'=>0);
         $shopSql = Db::name('ShopLocation')->field('id')->where($shopWhere)->buildSql(true);
         $db->where("shop_id = {$shopSql}");
 
