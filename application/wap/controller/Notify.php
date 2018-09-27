@@ -5,7 +5,7 @@ namespace app\wap\controller;
 use app\wap\service\OrderService;
 use think\Db;
 use think\Exception;
-
+use WeChat\Pay;
 /**
  * 支付回调处理
  * Class WxNotify

@@ -22,7 +22,7 @@ class Location extends BasicWap
     public $table = 'ShopLocation';
 
     public function getShops(){
-        $shops = Db::name($this->table)->where(['is_deleted' => '0','status'=>1])->select();
+        $shops = Db::name($this->table)->where(['is_deleted' => '0'])->select();
         empty($shops) && $this->error('请求的门店不存在！');
         foreach ($shops as $key => $val)
         {
