@@ -26,7 +26,7 @@ class Token extends Controller
         $data['token'] = $member->get();
 //        $this->ok('success',$data);
         //{"code":1,"msg":"success","data":{"token":"6ce28f461cf2fb3cd40daaa392aa56be"},"token":"2820282b1x2b2b211w1p"}
-        $this->redirect('http://www.xialangschool.cn/src/#/shopList?token='.$data['token'].'&msg=success');
+        $this->redirect('http://www.xialangschool.cn/food/#/shopList?token='.$data['token'].'&msg=success');
     }
 
     public function getUid(){
