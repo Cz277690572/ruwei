@@ -38,6 +38,7 @@ class Location extends BasicWap
         $shop = Db::name($this->table)->where(['id'=>$get['id'],'is_deleted' => '0'])->find();
         empty($shop) && $this->error('请求的门店不存在！');
         $shop['scene'] = explode('|',$shop['scene']);
+        $shop['status'] = config('shop.shop_status')[$shop['status']];
         $this->success('success',$shop);
     }
 
