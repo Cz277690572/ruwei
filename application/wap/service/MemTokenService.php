@@ -3,6 +3,7 @@
 namespace app\wap\service;
 
 use service\HttpService;
+use service\ToolsService;
 use think\Db;
 
 /**
@@ -89,7 +90,7 @@ class MemTokenService extends TokenService
             $uid = $member['id'];
         }else{
             $data['openid'] = $openid;
-            isset($wxResult['nickname']) && $data['nickname'] = $wxResult['nickname'];
+            isset($wxResult['nickname']) && $data['nickname'] = ToolsService::emojiEncode($wxResult['nickname']);
             isset($wxResult['sex']) && $data['sex'] = $wxResult['sex'];
             isset($wxResult['unionid']) && $data['unionid'] = $wxResult['unionid'];
             isset($wxResult['headimgurl']) && $data['headimg'] = $wxResult['headimgurl'];
