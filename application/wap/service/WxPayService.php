@@ -91,7 +91,7 @@ class WxPayService
         if($result['return_code'] !== 'SUCCESS'){
             return ['code' => 0, 'msg' => '支付异常，请稍后重试！'];
         }
-
+        P($result);exit();
         // 记录统一下单接口返回的prepay_id参数值
         $this->recordPreOrder($result['prepay_id']);
         // 创建JSAPI参数签名
