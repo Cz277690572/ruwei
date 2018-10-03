@@ -20,6 +20,7 @@ class Notify
     {
         $wechat = new Pay(config('wechat.'));
         $result = $wechat->getNotify();
+        P($result);
         // 库存充足，更新订单状态，扣库存
         // 库存不足，更新订单状态，增加库存扣除异常记录
         if($result['return_code'] == 'SUCCESS')
