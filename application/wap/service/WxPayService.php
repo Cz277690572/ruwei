@@ -101,30 +101,6 @@ class WxPayService
         $configJSON = json_encode(WechatService::webJsSDK(), JSON_UNESCAPED_UNICODE);
 
         return ['code' => 1, 'msg' => '获取已支付订单成功', 'data' => ['configJSON' => $configJSON, 'optionJSON' => $optionJSON]];
-
-//        echo '<pre>';
-//        echo "当前用户OPENID: {$openid}";
-//        echo "\n--- 创建预支付码 ---\n";
-//        var_export($result);
-//        echo '</pre>';
-
-//        echo '<pre>';
-//        echo "\n\n--- JSAPI 及 H5 参数 ---\n";
-//        var_export($options);
-//        echo '</pre>';
-//        echo "<button id='paytest' type='button'>JSAPI支付测试</button>";
-//        echo "
-//        <script src='//res.wx.qq.com/open/js/jweixin-1.2.0.js'></script>
-//        <script>
-//            wx.config($configJSON);
-//            document.getElementById('paytest').onclick = function(){
-//                var options = $optionJSON;
-//                options.success = function(){
-//                    alert('支付成功');
-//                }
-//                wx.chooseWXPay(options);
-//            }
-//        </script>";
     }
 
     // 记录预支付订单参数
