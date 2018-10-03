@@ -46,5 +46,5 @@ return [
     'token_salt' => 'XIA_LANG_XIAO_YUAN',
 
     // 微信支付回调接口Url地址
-    'pay_back_url' => 'http://xialangschool.cn/wap/notify/receiveNotify.html',
+    'pay_back_url' => 'http://www.xialangschool.cn/wap/notify/receiveNotify.html',
 ];

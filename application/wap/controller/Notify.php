@@ -18,7 +18,6 @@ class Notify
 
     public function receiveNotify()
     {
-        echo '1111';
         P('1111');
         $wechat = new Pay(config('wechat.'));
         $result = $wechat->getNotify();
