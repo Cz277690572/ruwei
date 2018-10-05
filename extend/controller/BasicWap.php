@@ -28,11 +28,11 @@ class BasicWap
     public function __construct()
     {
 
-        header('Access-Control-Allow-Origin:*');
-        header("Access-Control-Allow-Credentials", "true");
-        header("Access-Control-Allow-Methods", "*");
-        header("Access-Control-Allow-Headers", "Content-Type,Access-Token,token");
-        header("Access-Control-Expose-Headers", "*");
+        // header('Access-Control-Allow-Origin:*');
+        // header("Access-Control-Allow-Credentials", "true");
+        // header("Access-Control-Allow-Methods", "*");
+        // header("Access-Control-Allow-Headers", "Content-Type,Access-Token,token");
+        // header("Access-Control-Expose-Headers", "*");
         $this->request = app('request');
         // 校验请求是否携带token令牌
         // 校验令牌是否存在/过期
