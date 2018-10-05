@@ -27,7 +27,7 @@ class Notify
             Db::startTrans();
             try{
                 $order = Db::name('ShopOrder')
-                    ->where('order_no', '=', $result['out_trade_no'])
+                    ->where('out_trade_no', '=', $result['out_trade_no'])
                     ->find();
 
                 if($order['status'] == config('shop.unpaid')){

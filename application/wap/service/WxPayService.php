@@ -18,6 +18,7 @@ class WxPayService
     protected $shop;
     protected $orderId;
     protected $orderNo;
+    protected $out_trade_no;
 
     public function __construct($orderId)
     {
@@ -55,9 +56,9 @@ class WxPayService
         {
             return ['code' => 0, 'msg' => '订单中的商品价格已更新，请重新下单，避免错过优惠！'];
         }
-
+        $this->out_trade_no = OrderService::makeOrderNo();
         // 获取微信预支付订单参数，返回前端
-        return $this->makeWxPreOrder($this->order['order_title']);
+        return $this->makeWxPreOrder();
     }
 
     private function makeWxPreOrder()
@@ -79,7 +80,7 @@ class WxPayService
         $openid = TokenService::getCurrentTokenVar('openid');
         $options = [
             'body'             => $this->shop['title'],
-            'out_trade_no'     => $this->orderNo,
+            'out_trade_no'     => $this->out_trade_no,
             'total_fee'        => $this->order['real_price']*100,
             'openid'           => $openid,
             'trade_type'       => 'JSAPI',
@@ -103,11 +104,11 @@ class WxPayService
     }
 
     // 记录预支付订单参数
-    private function recordPreOrder($prepay_id)
+    private function recordPreOrder($prepay_id, $out_trade_no)
     {
         Db::name('ShopOrder')
             ->where('id','=', $this->orderId)
-            ->update(['pay_no' => $prepay_id]);
+            ->update(['pay_no' => $prepay_id, 'out_trade_no' => $this->out_trade_no]);
     }
 
     private function checkOrderValid()
