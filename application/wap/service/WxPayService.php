@@ -104,7 +104,7 @@ class WxPayService
     }
 
     // 记录预支付订单参数
-    private function recordPreOrder($prepay_id, $out_trade_no)
+    private function recordPreOrder($prepay_id)
     {
         Db::name('ShopOrder')
             ->where('id','=', $this->orderId)
