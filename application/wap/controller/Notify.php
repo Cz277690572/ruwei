@@ -4,7 +4,6 @@ namespace app\wap\controller;
 
 use app\wap\service\NoticeService;
 use app\wap\service\OrderService;
-use service\WechatService;
 use think\Db;
 use think\Exception;
 use WeChat\Pay;
@@ -35,12 +34,11 @@ class Notify
                 if($order['status'] == config('shop.unpaid')){
                     $oService = new OrderService();
                     $oStockStatus = $oService->checkOrderStock($order['id']);
-                    if($oStockStatus['code'] == 1)
-                    {
+                    if($oStockStatus['code'] == 1) {
                         $this->updateOrderStatus($order['id'], config('shop.paid'));
                         $this->reduceStock($oStockStatus['gStatusArray']);
                     }
-                    else{
+                    else {
                         $this->updateOrderStatus($order['id'], config('shop.paid'));
                         $this->recordOrderStock($order['id'], $order['order_no'], '订单已支付，但是库存不足!');
                     }
@@ -91,40 +89,11 @@ class Notify
             ->update(['status' => $status, 'is_pay' => 1]);
     }
 
-    public function testSend()
+    public function sendNotice()
     {
-        $data = array(
-            "touser" => "oNRCb1fi9-tcUKFvrRJdlVnPqVbw",
-            "template_id" => "0G-qVpD8X7YtGBhMd11CH4Xj8PZok9N4g8DXFGYp5xk",
-            "url" => "http://www.baidu.com",
-            "miniprogram" => array(
-                "appid" => "",
-                "pagepath" => ""
-            ),
-           "data" => array(
-                "first" => array(
-                    "value" => "新的订单通知！",
-                    "color" => "#173177"
-                ),
-                "keyword1" => array(
-                    "value" => "2018年10月17日",
-                    "color" => "#173177"
-                ),
-                "keyword2" => array(
-                    "value" => "猪脚饭x2,意大利意粉x3,F4套餐x4,网红主播套餐x6,波霸奶茶x4,,可乐x5,白饭x7,卫龙辣条x10",
-                    "color" => "#173177"
-                ),
-                "keyword3" => array(
-                    "value" => "A20181017654825645",
-                    "color" => "#173177"
-                ),
-                "remark" => array(
-                    "value" => "下单用户:陈伟彬,地址:新安宿舍111号,备注:加辣不加盐",
-                    "color" => "#173177"
-                )
-            )
-        );
-        $res = WechatService::WeChatTemplate()->send($data);
-        print_r($res);
+        $notice = new NoticeService();
+        $order = Db::name('ShopOrder')->where(['out_trade_no' => 'AA123970955657655'])->find();
+        $notice->send($order);
     }
+
 }

@@ -108,7 +108,7 @@ class WxPayService
     {
         Db::name('ShopOrder')
             ->where('id','=', $this->orderId)
-            ->update(['pay_no' => $prepay_id, 'out_trade_no' => $this->out_trade_no]);
+            ->update(['pay_no' => $prepay_id, 'pay_at' => date('Y-m-d H:i:s'), 'out_trade_no' => $this->out_trade_no]);
     }
 
     private function checkOrderValid()
