@@ -92,7 +92,7 @@ class Notify
     public function sendNotice()
     {
         $notice = new NoticeService();
-        $order = Db::name('ShopOrder')->where(['out_trade_no' => 'AA123970955657655'])->find();
+        $order = Db::name('ShopOrder')->where(['id' => '149'])->find();
         $notice->send($order);
     }
 
