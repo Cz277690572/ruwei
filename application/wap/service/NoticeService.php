@@ -37,8 +37,9 @@ class NoticeService
         $sendData = array();
         $sendData['goods'] = '';
         foreach ($orderGoods as $gk => $gv){
-            $sendData['goods'] = $sendData['goods'].$gv['goods_title'].'x'.$gv['number'].',';
+            $sendData['goods'] .= $gv['goods_title'].'x'.$gv['number'].',';
         }
+        $sendData['goods'] = rtrim($sendData['goods'],',');
         $sendData['member_openid'] = $orderExpress['openid'];
         $sendData['location_openid'] = empty($shopAccount['location_openid']) ? "" : $shopAccount['location_openid'];
         $sendData['delivery_openid'] = empty($shopAccount['delivery_openid']) ? "" : $shopAccount['delivery_openid'];
@@ -71,7 +72,7 @@ class NoticeService
         $data = array(
             "touser" => $sendData['location_openid'],
             "template_id" => "0G-qVpD8X7YtGBhMd11CH4Xj8PZok9N4g8DXFGYp5xk",
-            "url" => "#",
+            "url" => "http://www.xialangschool.cn/food",
             "miniprogram" => array(
                 "appid" => "",
                 "pagepath" => ""
@@ -108,7 +109,7 @@ class NoticeService
         $data = array(
             "touser" => $sendData['delivery_openid'],
             "template_id" => "0G-qVpD8X7YtGBhMd11CH4Xj8PZok9N4g8DXFGYp5xk",
-            "url" => "#",
+            "url" => "http://www.xialangschool.cn/food",
             "miniprogram" => array(
                 "appid" => "",
                 "pagepath" => ""
@@ -137,16 +138,15 @@ class NoticeService
             )
         );
         $res = WechatService::WeChatTemplate()->send($data);
-        print_r($res);
     }
 
     // 发送订单通知给管理员
     protected function sendAdmin($sendData)
     {
         $data = array(
-            "touser" => "oNRCb1fi9-tcUKFvrRJdlVnPqVbw",
+            "touser" => "oNRCb1aQKm3_LjDD79yIkuZObh5Q",
             "template_id" => "0G-qVpD8X7YtGBhMd11CH4Xj8PZok9N4g8DXFGYp5xk",
-            "url" => "#",
+            "url" => "http://www.xialangschool.cn/food",
             "miniprogram" => array(
                 "appid" => "",
                 "pagepath" => ""
@@ -175,7 +175,6 @@ class NoticeService
             )
         );
         $res = WechatService::WeChatTemplate()->send($data);
-        print_r($res);
     }
 
     // 发送订单通知给下单用户
@@ -217,6 +216,5 @@ class NoticeService
             )
         );
         $res = WechatService::WeChatTemplate()->send($data);
-        print_r($res);
     }
 }

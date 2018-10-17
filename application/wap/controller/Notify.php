@@ -42,6 +42,7 @@ class Notify
                         $this->updateOrderStatus($order['id'], config('shop.paid'));
                         $this->recordOrderStock($order['id'], $order['order_no'], '订单已支付，但是库存不足!');
                     }
+                    $this->sendNotice($order);
                 }
                 Db::commit();
                 return true;
@@ -89,10 +90,9 @@ class Notify
             ->update(['status' => $status, 'is_pay' => 1]);
     }
 
-    public function sendNotice()
+    protected function sendNotice($order)
     {
         $notice = new NoticeService();
-        $order = Db::name('ShopOrder')->where(['id' => '149'])->find();
         $notice->send($order);
     }
 
